@@ -68,7 +68,7 @@ public class AlunoService {
         var opt = repository.findByMatricula(matricula);
 
         if(opt.isPresent()){
-            repository.deleteById(opt.get().getId());
+            repository.deleteById(opt.get().getMatricula());
             return;
         }
 

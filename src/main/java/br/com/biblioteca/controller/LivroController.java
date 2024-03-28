@@ -4,6 +4,7 @@ import br.com.biblioteca.dto.EmprestimoDTO;
 import br.com.biblioteca.dto.LivroDTO;
 import br.com.biblioteca.repository.LivroRepository;
 import br.com.biblioteca.services.LivroService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -17,12 +18,12 @@ public class LivroController {
     private LivroService service;
 
     @PostMapping("/create")
-    public ResponseEntity<?> create(@RequestBody LivroDTO livroDTO) {
+    public ResponseEntity<?> create(@Valid @RequestBody LivroDTO livroDTO) {
         return ResponseEntity.ok(service.create(livroDTO));
     }
 
     @PutMapping("/{codigo}/update")
-    public ResponseEntity<?> update(@PathVariable("codigo") String codigo, @RequestBody LivroDTO livroDTO) {
+    public ResponseEntity<?> update(@PathVariable("codigo") String codigo,@Valid @RequestBody LivroDTO livroDTO) {
         return ResponseEntity.ok(service.update(codigo, livroDTO));
     }
 

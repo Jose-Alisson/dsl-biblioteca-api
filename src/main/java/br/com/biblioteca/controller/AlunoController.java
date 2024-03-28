@@ -3,6 +3,7 @@ package br.com.biblioteca.controller;
 import br.com.biblioteca.dto.AlunoDTO;
 import br.com.biblioteca.model.Aluno;
 import br.com.biblioteca.services.AlunoService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -16,17 +17,17 @@ public class AlunoController {
     private AlunoService service;
 
     @PostMapping("/create")
-    public ResponseEntity<?> create(@RequestBody AlunoDTO alunoDTO){
+    public ResponseEntity<?> create(@Valid @RequestBody AlunoDTO alunoDTO){
         return ResponseEntity.ok(service.create(alunoDTO));
     }
 
     @PostMapping("/createWithAccess")
-    public ResponseEntity<?> createAlunoAccess(@RequestBody AlunoDTO alunoDTO){
+    public ResponseEntity<?> createAlunoAccess(@Valid @RequestBody AlunoDTO alunoDTO){
         return ResponseEntity.ok(service.createWithAccess(alunoDTO));
     }
 
     @PutMapping("/{matricula}/update")
-    public ResponseEntity<?> update(@PathVariable("matricula") String matricula,@RequestBody AlunoDTO alunoDTO){
+    public ResponseEntity<?> update(@PathVariable("matricula") String matricula,@Valid @RequestBody AlunoDTO alunoDTO){
         return ResponseEntity.ok(service.update(matricula,alunoDTO));
     }
 

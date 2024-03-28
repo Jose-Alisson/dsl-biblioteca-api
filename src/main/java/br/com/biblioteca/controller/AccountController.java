@@ -2,6 +2,7 @@ package br.com.biblioteca.controller;
 
 import br.com.biblioteca.model.Account;
 import br.com.biblioteca.services.AccountService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -19,7 +20,7 @@ public class AccountController {
     }
 
     @PostMapping("/create")
-    public ResponseEntity<?> create(@RequestBody Account account){
+    public ResponseEntity<?> create(@Valid @RequestBody Account account){
         return ResponseEntity.ok(service.create(account));
     }
 }

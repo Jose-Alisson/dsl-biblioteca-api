@@ -58,6 +58,7 @@ public class AccountFilter extends OncePerRequestFilter {
 				return;
 			}
 		} catch (Exception e) {
+			System.out.println("é pego");
 			e.printStackTrace();
 		}
 		

@@ -1,10 +1,17 @@
 package br.com.biblioteca.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.JdbcType;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
+
+import java.io.Serializable;
 
 @Entity
 @Table(name = "alunos")
@@ -12,22 +19,16 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class Aluno {
+public class Aluno implements Serializable {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private String matricula;
 
     private String nome;
 
     private String turma;
 
-    @Column(unique = true)
-    private String matricula;
-
     private String turno;
-
-    private boolean ativo = true;
 
     @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "account_id")

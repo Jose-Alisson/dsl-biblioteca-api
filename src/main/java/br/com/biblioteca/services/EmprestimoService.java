@@ -5,6 +5,7 @@ import br.com.biblioteca.dto.LivroDTO;
 import br.com.biblioteca.exception.causable.ErrDateTransfer;
 import br.com.biblioteca.model.Aluno;
 import br.com.biblioteca.model.Emprestimo;
+import br.com.biblioteca.model.Livro;
 import br.com.biblioteca.repository.AlunoRepository;
 import br.com.biblioteca.repository.EmprestimoRepository;
 import br.com.biblioteca.repository.LivroRepository;
@@ -36,14 +37,8 @@ public class EmprestimoService {
         emprestimo.setDataCriacao(LocalDate.now());
 
         if (emprestimo.getAluno() != null) {
-            emprestimo.setAluno(Aluno.builder().id(alunoRepository.getIdByMatricula(emprestimoDTO.getAluno().getMatricula())).build());
+            emprestimo.setAluno(Aluno.builder().matricula(emprestimoDTO.getAluno().getMatricula()).build());
         }
-
-        emprestimo.getLivros().forEach(livro -> {
-            if (livro.getId() == null && livro.getCodigo() != null) {
-                livro.setId(livroRepository.getIdByCodigo(livro.getCodigo()));
-            }
-        });
 
         return mapper.map(repository.save(emprestimo), EmprestimoDTO.class);
     }
@@ -57,16 +52,10 @@ public class EmprestimoService {
             emprestimo.setTitulo(emprestimoDTO.getTitulo());
 
             if (emprestimo.getAluno() != null) {
-                emprestimo.setAluno(alunoRepository.findById(alunoRepository.getIdByMatricula(emprestimoDTO.getAluno().getMatricula())).get());
+                emprestimo.setAluno(alunoRepository.findById(emprestimoDTO.getAluno().getMatricula()).get());
             }
 
-            emprestimoDTO.getLivros().forEach(livro -> {
-                if (livro.getId() == null && livro.getCodigo() != null) {
-                    livro.setId(livroRepository.getIdByCodigo(livro.getCodigo()));
-                }
-            });
-
-            emprestimo.setLivros(emprestimoDTO.getLivros());
+            emprestimo.setLivros(livroRepository.findAllById(emprestimoDTO.getLivros().stream().map(Livro::getCodigo).toList()));
 
             emprestimo.setDataDevolvida(emprestimoDTO.getDataDevolvida());
 
@@ -111,8 +100,10 @@ public class EmprestimoService {
         Map<String, Map<String, List<EmprestimoDTO>>> main = new HashMap<>();
 
         listDto.forEach(dto -> {
-            if (!main.containsKey(dto.getAluno().getTurma())) {
-                main.put(dto.getAluno().getTurma(), new HashMap<>());
+            if(dto.getAluno() != null) {
+                if (!main.containsKey(dto.getAluno().getTurma())) {
+                    main.put(dto.getAluno().getTurma(), new HashMap<>());
+                }
             }
         });
 

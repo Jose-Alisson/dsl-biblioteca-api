@@ -2,6 +2,7 @@ package br.com.biblioteca.controller;
 
 import br.com.biblioteca.dto.EmprestimoDTO;
 import br.com.biblioteca.services.EmprestimoService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -16,12 +17,12 @@ public class EmprestimoController {
     private EmprestimoService service;
 
     @PostMapping("/create")
-    public ResponseEntity<?> create(@RequestBody EmprestimoDTO emprestimoDTO){
+    public ResponseEntity<?> create(@Valid @RequestBody EmprestimoDTO emprestimoDTO){
         return ResponseEntity.ok(service.create(emprestimoDTO));
     }
 
     @PutMapping("/{id}/update")
-    public ResponseEntity<?> update(@PathVariable("id") Long id, @RequestBody EmprestimoDTO emprestimoDTO){
+    public ResponseEntity<?> update(@PathVariable("id") Long id,@Valid @RequestBody EmprestimoDTO emprestimoDTO){
         return ResponseEntity.ok(service.update(id, emprestimoDTO));
     }
 
