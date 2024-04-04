@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
+
 @RestController
 @RequestMapping("/api/account")
 public class AccountController {
@@ -16,7 +18,9 @@ public class AccountController {
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestParam("user") String user, @RequestParam("password") String password){
-        return ResponseEntity.ok(service.login(user, password));
+        var map = new HashMap<String, String>();
+        map.put("access", service.login(user, password));
+        return ResponseEntity.ok(map);
     }
 
     @PostMapping("/create")
