@@ -45,6 +45,7 @@ public class AccountService {
     }
 
     public AccountDTO create(Account account) {
+        account.setTypeAccount(TypeAccount.USER);
         account.setPassword(encoder.encode(account.getPassword()));
         return mapper.map(repository.save(account), AccountDTO.class);
     }
