@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 import java.util.Optional;
 
 @Service
-public interface AlunoRepository extends JpaRepository<Aluno, String> {
+public interface AlunoRepository extends JpaRepository<Aluno, Long> {
     @Query(value = "select * from alunos a where a.matricula = ?1", nativeQuery = true)
     Optional<Aluno> findByMatricula(String matricula);
 
@@ -18,5 +18,6 @@ public interface AlunoRepository extends JpaRepository<Aluno, String> {
 
     @Query(value = "select * from alunos where account_id = ?1", nativeQuery = true)
     Optional<Aluno> findByUserId(Long id);
-
+    @Query(value = "select exists(select 1 from alunos a where a.matricula = ?1)", nativeQuery = true)
+    long isExistByMatricula(String matricula);
 }

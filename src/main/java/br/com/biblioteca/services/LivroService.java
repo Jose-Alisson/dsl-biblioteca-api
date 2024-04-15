@@ -10,7 +10,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @Service
@@ -22,10 +24,16 @@ public class LivroService {
     private final ModelMapper mapper = new ModelMapper();
 
     public LivroDTO create(LivroDTO livroDTO){
+
+        if(repository.isExistByCodigo(livroDTO.getCodigo()) != 0) {
+            Map<String, Object> body = new HashMap<>();
+            body.put("codigo", "Livro com código igual");
+            throw new ErrDateTransfer("", HttpStatus.BAD_REQUEST, body);
+        }
         return mapper.map(repository.save(mapper.map(livroDTO, Livro.class)), LivroDTO.class);
     }
 
-    @Transactional(readOnly = true)
+    @Transactional(readOnly = false)
     public LivroDTO update(String codigo, LivroDTO livroDTO){
         var livroOpt = repository.findByCodigo(codigo);
 
@@ -34,6 +42,12 @@ public class LivroService {
             livro.setTitulo(livroDTO.getTitulo());
             livro.setGenero(livroDTO.getGenero());
             livro.setCodigo(livroDTO.getCodigo());
+
+            if(repository.isExistByCodigo(livroDTO.getCodigo()) != 0){
+                Map<String, Object> body = new HashMap<>();
+                body.put("codigo", "Livro com código igual");
+                throw new ErrDateTransfer("", HttpStatus.BAD_REQUEST, body);
+            }
 
             return mapper.map(repository.save(livro), LivroDTO.class);
         }

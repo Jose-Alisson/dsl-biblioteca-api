@@ -22,6 +22,10 @@ import java.io.Serializable;
 public class Aluno implements Serializable {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long id;
+
+    @Column(unique = true)
     private String matricula;
 
     private String nome;

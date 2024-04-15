@@ -13,8 +13,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 @Service
 public class AccountService {
@@ -32,16 +35,18 @@ public class AccountService {
 
     private final ModelMapper mapper = new ModelMapper();
 
-    public String login(String user, String password){
-        var authToken = new UsernamePasswordAuthenticationToken(user, password);
-        Authentication auth = authenticationManager.authenticate(authToken);
-        var response = ((AccountDetail) auth.getPrincipal()).getAccount();
+    public String login(String user, String password) {
+        Optional<Account> opt = repository.findByUser(user);
 
-        if(response.isPresent()){
+        if (opt.isPresent()) {
+            var authToken = new UsernamePasswordAuthenticationToken(user, password);
+            Authentication auth = authenticationManager.authenticate(authToken);
+
+            var response = ((AccountDetail) auth.getPrincipal()).getAccount();
             return tokenService.generateToken(response.get());
-        }
 
-        throw new ErrDateTransfer("", HttpStatus.UNAUTHORIZED);
+        }
+        throw new ErrDateTransfer("Usuário não encontrado", HttpStatus.NOT_FOUND);
     }
 
     public AccountDTO create(Account account) {
@@ -50,11 +55,11 @@ public class AccountService {
         return mapper.map(repository.save(account), AccountDTO.class);
     }
 
-    public void delete(Long id){
+    public void delete(Long id) {
 
     }
 
-    public AccountDTO getAccount(){
+    public AccountDTO getAccount() {
         return null;
     }
 }

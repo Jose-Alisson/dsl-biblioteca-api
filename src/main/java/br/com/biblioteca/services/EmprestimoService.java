@@ -37,8 +37,18 @@ public class EmprestimoService {
         emprestimo.setDataCriacao(LocalDate.now());
 
         if (emprestimo.getAluno() != null) {
-            emprestimo.setAluno(Aluno.builder().matricula(emprestimoDTO.getAluno().getMatricula()).build());
+            Optional<Aluno> aluno = alunoRepository.findByMatricula(emprestimoDTO.getAluno().getMatricula());
+
+            if(aluno.isPresent()){
+                emprestimo.setAluno(aluno.get());
+            }else {
+                Map<String, Object> map = new HashMap<>();
+                map.put("aluno", "Buscado por matricula: Aluno não encontrado");
+                throw new ErrDateTransfer("", HttpStatus.BAD_REQUEST, map);
+            }
         }
+
+        emprestimo.setLivros(livroRepository.findAllByCodigo(emprestimoDTO.getLivros().stream().map(Livro::getCodigo).toList()));
 
         return mapper.map(repository.save(emprestimo), EmprestimoDTO.class);
     }
@@ -52,10 +62,19 @@ public class EmprestimoService {
             emprestimo.setTitulo(emprestimoDTO.getTitulo());
 
             if (emprestimo.getAluno() != null) {
-                emprestimo.setAluno(alunoRepository.findById(emprestimoDTO.getAluno().getMatricula()).get());
+               Optional<Aluno> aluno = alunoRepository.findByMatricula(emprestimoDTO.getAluno().getMatricula());
+
+                if(aluno.isPresent()){
+                    emprestimo.setAluno(aluno.get());
+                }else {
+                    Map<String, Object> map = new HashMap<>();
+                    map.put("aluno", "Buscado por matricula: Aluno não encontrado");
+                    throw new ErrDateTransfer("", HttpStatus.BAD_REQUEST, map);
+                }
             }
 
-            emprestimo.setLivros(livroRepository.findAllById(emprestimoDTO.getLivros().stream().map(Livro::getCodigo).toList()));
+            //emprestimo.setLivros(livroRepository.findAllById(livroRepository. emprestimoDTO.getLivros().stream().map(Livro::getCodigo).toList()));
+            emprestimo.setLivros(livroRepository.findAllByCodigo(emprestimoDTO.getLivros().stream().map(Livro::getCodigo).toList()));
 
             emprestimo.setDataDevolvida(emprestimoDTO.getDataDevolvida());
 

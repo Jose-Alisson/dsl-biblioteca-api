@@ -30,6 +30,12 @@ public class AlunoService {
     public AlunoDTO create(AlunoDTO alunoDTO){
         Aluno aluno = mapper.map(alunoDTO, Aluno.class);
 
+        if(repository.isExistByMatricula(alunoDTO.getMatricula()) != 0){
+            Map<String, Object> body = new HashMap<>();
+            body.put("matricula", "Aluno com matricula igual");
+            throw new ErrDateTransfer("", HttpStatus.BAD_REQUEST, body);
+        }
+
         return mapper.map(repository.save(aluno), AlunoDTO.class);
     }
 
@@ -58,21 +64,27 @@ public class AlunoService {
             aluno.setMatricula(alunoDTO.getMatricula());
             aluno.setAccount(aluno.getAccount());
 
+            if(repository.isExistByMatricula(alunoDTO.getMatricula()) != 0){
+                Map<String, Object> body = new HashMap<>();
+                body.put("matricula", "Aluno com matricula igual");
+                throw new ErrDateTransfer("", HttpStatus.BAD_REQUEST, body);
+            }
+
             return mapper.map(repository.save(aluno), AlunoDTO.class);
         }
 
-        throw new ErrDateTransfer("", HttpStatus.NOT_FOUND);
+        throw new ErrDateTransfer("Aluno não encontrado", HttpStatus.NOT_FOUND);
     }
 
     public void deleteByMatricula(String matricula){
         var opt = repository.findByMatricula(matricula);
 
         if(opt.isPresent()){
-            repository.deleteById(opt.get().getMatricula());
+            repository.deleteById(opt.get().getId());
             return;
         }
 
-        throw new ErrDateTransfer("", HttpStatus.NOT_FOUND);
+        throw new ErrDateTransfer("Aluno não encontrado", HttpStatus.NOT_FOUND);
     }
 
     public AlunoDTO getByAccount(){
@@ -82,7 +94,7 @@ public class AlunoService {
         if(opt.isPresent()){
             return mapper.map(opt.get(), AlunoDTO.class);
         }
-        throw new ErrDateTransfer("", HttpStatus.NOT_FOUND);
+        throw new ErrDateTransfer("Aluno não encontrado", HttpStatus.NOT_FOUND);
     }
 
     public List<AlunoDTO> getAll(){
@@ -112,6 +124,6 @@ public class AlunoService {
             return mapper.map(alunoOpt.get(), AlunoDTO.class);
         }
 
-        throw new ErrDateTransfer("", HttpStatus.NOT_FOUND);
+        throw new ErrDateTransfer("Aluno não encontrado", HttpStatus.NOT_FOUND);
     }
 }

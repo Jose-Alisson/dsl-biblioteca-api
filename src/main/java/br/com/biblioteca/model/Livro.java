@@ -16,12 +16,13 @@ import java.io.Serializable;
 @NoArgsConstructor
 public class Livro implements Serializable {
 
-    /*@Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;*/
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    //@Id
     /*@NotNull(message = "O código não pode ser nulo")
     @NotBlank(message = "O código não pode ser branco")*/
+    @Column(unique = true)
     private String codigo;
 
    /* @NotNull(message = "O titulo não pode ser nulo")

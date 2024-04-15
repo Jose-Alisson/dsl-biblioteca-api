@@ -23,7 +23,8 @@ public class LivroController {
     }
 
     @PutMapping("/{codigo}/update")
-    public ResponseEntity<?> update(@PathVariable("codigo") String codigo,@Valid @RequestBody LivroDTO livroDTO) {
+    public ResponseEntity<?> update(@PathVariable("codigo") String codigo, @Valid @RequestBody LivroDTO livroDTO) {
+        System.out.println(livroDTO);
         return ResponseEntity.ok(service.update(codigo, livroDTO));
     }
 
