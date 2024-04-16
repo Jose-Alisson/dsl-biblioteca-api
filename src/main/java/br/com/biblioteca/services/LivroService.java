@@ -39,11 +39,17 @@ public class LivroService {
 
         if(livroOpt.isPresent()){
             var livro = livroOpt.get();
+            livro.setAutor(livroDTO.getAutor());
+            livro.setEditora(livroDTO.getEditora());
+            livro.setVolume(livroDTO.getVolume());
             livro.setTitulo(livroDTO.getTitulo());
             livro.setGenero(livroDTO.getGenero());
             livro.setCodigo(livroDTO.getCodigo());
+            livro.setQuantidade(livroDTO.getQuantidade());
+            livro.setObservacao(livroDTO.getObservacao());
+            livro.setClassificacao(livroDTO.getClassificacao());
 
-            if(repository.isExistByCodigo(livroDTO.getCodigo()) != 0){
+            if(!codigo.equals(livroDTO.getCodigo()) && (repository.isExistByCodigo(livroDTO.getCodigo()) != 0)){
                 Map<String, Object> body = new HashMap<>();
                 body.put("codigo", "Livro com código igual");
                 throw new ErrDateTransfer("", HttpStatus.BAD_REQUEST, body);

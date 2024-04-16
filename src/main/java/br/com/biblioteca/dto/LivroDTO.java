@@ -19,4 +19,16 @@ public class LivroDTO {
     @NotNull(message = "O código não pode ser nulo")
     @NotBlank(message = "O código não pode ser branco")
     public String codigo;
+
+    public String autor;
+
+    public String editora;
+
+    public String volume;
+
+    public String classificacao;
+
+    public String quantidade;
+
+    private String observacao;
 }

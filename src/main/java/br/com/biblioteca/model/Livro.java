@@ -19,6 +19,15 @@ public class Livro implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    private String autor;
+
+    private String editora;
+
+    private String volume;
+
+    private String classificacao;
+
     //@Id
     /*@NotNull(message = "O código não pode ser nulo")
     @NotBlank(message = "O código não pode ser branco")*/
@@ -29,7 +38,11 @@ public class Livro implements Serializable {
     @NotBlank(message = "O titulo não pode ser branco")*/
     private String titulo;
 
+    private String quantidade;
+
     /*@NotNull(message = "O gênero não pode ser nulo")
     @NotBlank(message = "O gênero não pode ser branco")*/
     private String genero;
+
+    private String observacao;
 }
