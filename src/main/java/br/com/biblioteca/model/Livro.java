@@ -45,5 +45,6 @@ public class Livro implements Serializable {
     @Column(length = 500)
     private String genero;
 
+    @Column(length = 500)
     private String observacao;
 }
