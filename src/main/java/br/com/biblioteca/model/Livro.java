@@ -42,7 +42,7 @@ public class Livro implements Serializable {
 
     /*@NotNull(message = "O gênero não pode ser nulo")
     @NotBlank(message = "O gênero não pode ser branco")*/
-    @Column(length = 50)
+    @Column(length = 500)
     private String genero;
 
     private String observacao;
